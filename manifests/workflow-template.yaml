@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Workflow
+kind: WorkflowTemplate
 metadata:
-  generateName: steps-
+  name: hello
 spec:
   entrypoint: hello
 
@@ -21,4 +21,3 @@ spec:
       image: docker/whalesay
       command: [cowsay]
       args: ["{{inputs.parameters.message}}"]
-

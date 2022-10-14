@@ -1,18 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
+kind: Workflow
 metadata:
-  name: buildkit-two
+  name: buildkit
 spec:
   arguments:
     parameters:
       - name: repo
-        value: https://github.com/cyberblack28/workflows.git
+        value: https://github.com/argoproj/argo-workflows
       - name: branch
-        value: master
+        value: release-3.0
       - name: path
-        value: workflows/app
+        value: argo-workflows/test/e2e/images/argosay/v2
       - name: image
-        value: cyberblack28/sample-app:v1
+        value: cyberblack28/argosay:v2
   entrypoint: main
   # We use a volume claim template so that we can have a shared workspace.
   volumeClaimTemplates:
@@ -94,8 +94,8 @@ spec:
           - build
           - -v
           - -o
-          - gitops-go-app
-          - ./main.go
+          - argosay
+          - ./...
     - name: image
       inputs:
         parameters:
