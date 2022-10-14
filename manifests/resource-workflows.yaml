@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: resource-template-
+spec:
+  entrypoint: resource
+  templates:
+  - name: resource
+    steps:
+    - - name: cm-create
+        template: create-cm
+    - - name: get-cm
+        template: get-cm
+  - name: create-cm
+    serviceAccountName: wf-sa
+    resource:
+      action: create
+      manifest: |
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: sample-cm
+        data:
+          key: test
+  - name: get-cm
+    serviceAccountName: wf-sa
+    container:
+      image: bitnami/kubectl
+      command: ["/bin/sh", "-c"]
+      args: ["kubectl get cm sample-cm"]

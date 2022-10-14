@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: artifact-repo
+data:
+  minio-artifact: |
+    s3:
+      bucket: my-bucket
+      endpoint: argo-artifacts:9000
+      insecure: true
+      accessKeySecret:
+        name: argo-artifacts
+        key: accesskey
+      secretKeySecret:
+        name: argo-artifacts
+        key: secretkey
