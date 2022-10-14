@@ -4,7 +4,7 @@
 
 # Argo Workflows Set Up
 
-##1.Argo Workflows Install
+## 1.Argo Workflows Install
 
 デモ環境は、Helm でインストールを実施したので、その手順となります。
 
@@ -51,7 +51,7 @@ argo-workflows-workflow-controller-8674b6b66d-26ks4   1/1     Running   0       
 
 argo workflows のインストールは完了です。
 
-##2.Argo Workflows Access
+## 2.Argo Workflows Access
 
 デモ環境では、Service としてインストールされる argo-workflow-service の type を LoadBalancer に変更して、
 ブラウザからアクセスできるようにします。
@@ -83,6 +83,39 @@ NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)
 argo-workflows-server   LoadBalancer   10.96.147.139   193.xxx.xxx.xxx   2746:31787/TCP   24m
 ```
 
-ブラウザを起動して、アクセスします。
+ブラウザを起動して、UI にアクセスします。
 
 http://193.xxx.xxx.xxx:2746/
+
+![Login 1](images/01.png)
+
+Token を取得して、ログインします。
+
+argo-workflows-server Podのコンテナから argo auth token コマンドを実行して Token を取得します。
+
+argo-workflows-server の Pod 名を確認します。
+
+```sh
+kubectl get pods -n argo
+```
+```sh
+NAME                                                  READY   STATUS    RESTARTS   AGE
+argo-workflows-server-6498c4c886-f8g24                1/1     Running   0          36m
+argo-workflows-workflow-controller-8674b6b66d-26ks4   1/1     Running   0          36m
+```
+
+```sh
+kubectl exec -it argo-workflows-server-6498c4c886-f8g24 -n argo -- argo auth token
+```
+```sh
+Bearer eyJ...
+```
+
+Bearer を含めて、ログイン画面内で入力して、ログインボタンをクリックします。
+
+![Login 2](./images/02.png)
+
+ログイン完了です。
+
+![Login 3](./images/03.png)
+
