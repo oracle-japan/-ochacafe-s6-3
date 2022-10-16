@@ -12,7 +12,7 @@ spec:
       - name: path
         value: argo-workflows/test/e2e/images/argosay/v2
       - name: image
-        value: cyberblack28/argosay:v2
+        value: <your-dockerhub-repository>/argosay:v2
   entrypoint: main
   # We use a volume claim template so that we can have a shared workspace.
   volumeClaimTemplates:

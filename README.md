@@ -522,3 +522,118 @@ DockerHub にイメージが格納されます。
 
 ![Argo Workflows Demo](./images/33.png)
 
+# Airflow Set Up
+
+## 1.Airflow Install
+
+デモ環境は、Helm でインストールを実施したので、その手順となります。
+
+```sh
+helm repo add apache-airflow https://airflow.apache.org
+```
+
+```sh
+helm repo update
+```
+
+```sh
+helm install airflow apache-airflow/airflow --create-namespace --namespace airflow
+```
+```sh
+NAME: airflow
+LAST DEPLOYED: Sun Oct 16 13:30:17 2022
+NAMESPACE: airflow
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Thank you for installing Apache Airflow 2.4.1!
+
+Your release is named airflow.
+You can now access your dashboard(s) by executing the following command(s) and visiting the corresponding port at localhost in your browser:
+
+Airflow Webserver:     kubectl port-forward svc/airflow-webserver 8080:8080 --namespace airflow
+Default Webserver (Airflow UI) Login credentials:
+    username: admin
+    password: admin
+Default Postgres connection credentials:
+    username: postgres
+    password: postgres
+    port: 5432
+
+You can get Fernet Key value by running the following:
+
+    echo Fernet Key: $(kubectl get secret --namespace airflow airflow-fernet-key -o jsonpath="{.data.fernet-key}" | base64 --decode)
+
+###########################################################
+#  WARNING: You should set a static webserver secret key  #
+###########################################################
+
+You are using a dynamically generated webserver secret key, which can lead to
+unnecessary restarts of your Airflow components.
+
+Information on how to set a static webserver secret key can be found here:
+https://airflow.apache.org/docs/helm-chart/stable/production-guide.html#webserver-secret-key
+```
+
+7個の Pod が Running であることを確認します。
+
+```sh
+kubectl get pods -n airflow
+```
+```sh
+NAME                                 READY   STATUS    RESTARTS   AGE
+airflow-postgresql-0                 1/1     Running   0          2m46s
+airflow-redis-0                      1/1     Running   0          2m46s
+airflow-scheduler-5754fc7746-cdkvb   2/2     Running   0          2m47s
+airflow-statsd-5b4964646f-nqqzc      1/1     Running   0          2m47s
+airflow-triggerer-7795dfffcb-ln22d   1/1     Running   0          2m47s
+airflow-webserver-7bf76fd7fc-qccj5   1/1     Running   0          2m47s
+airflow-worker-0                     2/2     Running   0          2m46s
+```
+
+## 2.Airflow UI Access
+
+デモ環境では、Service としてインストールされる argo-workflow-service の type を LoadBalancer に変更して、
+ブラウザからアクセスできるようにします。
+
+```sh
+kubectl edit service/airflow-webserver -n airflow
+```
+```sh
+・
+・ ＜省略＞
+・
+  selector:
+    component: webserver
+    release: airflow
+    tier: airflow
+  sessionAffinity: None
+  type: ClusterIP # type: LoadBalancer に変更
+・
+・ ＜省略＞
+・
+```
+
+EXTERNAL-IP を確認
+
+```sh
+kubectl get service airflow-webserver -n airflow
+```
+```sh
+NAME                TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)          AGE
+airflow-webserver   LoadBalancer   10.96.110.188   144.xxx.xxx.xxx   8080:31703/TCP   4h5m
+```
+
+ブラウザを起動して、UI にアクセスします。
+
+http://144.xxx.xxx.xxx:8080/
+
+![Airflow Login 1](images/34.png)
+
+Default Username : admin  
+Default Password : admin
+
+ログイン完了です。
+
+![Airflow Login 2](images/35.png)
