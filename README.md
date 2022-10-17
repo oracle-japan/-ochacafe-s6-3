@@ -637,3 +637,88 @@ Default Password : admin
 ログイン完了です。
 
 ![Airflow Login 2](images/35.png)
+
+## 3.サンプルワークフローのロード設定
+
+チュートリアルを含めた、サンプルワークフローを読み込むことができるので、
+有効化します。
+
+values.yaml ファイルを書き出して、編集します。
+
+```sh
+helm show values apache-airflow/airflow > values.yaml
+```
+
+extraEnv の箇所を以下内容に変更します。
+
+```sh
+vim values.yaml
+```
+```sh
+・
+・ ＜省略＞
+・
+extraEnv: |
+	- name: AIRFLOW__CORE__LOAD_EXAMPLES
+		value: 'True'
+・
+・ ＜省略＞
+・
+```
+
+変更した values.yaml を適用します。
+
+```sh
+helm upgrade --install airflow apache-airflow/airflow -n airflow -f values.yaml
+```
+```sh
+Release "airflow" has been upgraded. Happy Helming!
+NAME: airflow
+LAST DEPLOYED: Mon Oct 17 06:00:39 2022
+NAMESPACE: airflow
+STATUS: deployed
+REVISION: 3
+TEST SUITE: None
+NOTES:
+Thank you for installing Apache Airflow 2.4.1!
+
+Your release is named airflow.
+You can now access your dashboard(s) by executing the following command(s) and visiting the corresponding port at localhost in your browser:
+
+Airflow Webserver:     kubectl port-forward svc/airflow-webserver 8080:8080 --namespace airflow
+Default Webserver (Airflow UI) Login credentials:
+    username: admin
+    password: admin
+Default Postgres connection credentials:
+    username: postgres
+    password: postgres
+    port: 5432
+
+You can get Fernet Key value by running the following:
+
+    echo Fernet Key: $(kubectl get secret --namespace airflow airflow-fernet-key -o jsonpath="{.data.fernet-key}" | base64 --decode)
+
+###########################################################
+#  WARNING: You should set a static webserver secret key  #
+###########################################################
+
+You are using a dynamically generated webserver secret key, which can lead to
+unnecessary restarts of your Airflow components.
+
+Information on how to set a static webserver secret key can be found here:
+https://airflow.apache.org/docs/helm-chart/stable/production-guide.html#webserver-secret-key
+```
+
+ステータスを確認します。
+
+```sh
+ helm ls -n airflow
+```
+```
+NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+airflow airflow         3               2022-10-17 06:00:39.789334761 +0000 UTC deployed        airflow-1.7.0   2.4.1 
+```
+
+以下のようにサンプルワークフローがリスト表示されます。
+
+![Sample Workflow](images/36.png)
