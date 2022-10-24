@@ -659,8 +659,8 @@ vim values.yaml
 ・ ＜省略＞
 ・
 extraEnv: |
-	- name: AIRFLOW__CORE__LOAD_EXAMPLES
-		value: 'True'
+　- name: AIRFLOW__CORE__LOAD_EXAMPLES
+　　value: 'True'
 ・
 ・ ＜省略＞
 ・
@@ -722,3 +722,38 @@ airflow airflow         3               2022-10-17 06:00:39.789334761 +0000 UTC 
 以下のようにサンプルワークフローがリスト表示されます。
 
 ![Sample Workflow](images/36.png)
+
+# Airflow Demo
+
+読み込んだサンプルワークフローの tutorial ワークフローを実施します。
+
+print_date タスクは、Airflow の BashOperator から date コマンドを実行、sleep タスクは5秒間 sleep 、templated は、Airflow の jinja テンプレートコードを実行するタスクです。
+
+![Airflow Demo1](images/37.png)
+
+サンプルワークフロー tutrial を有効化して、テキストリンクをクリックします。
+
+![Airflow Demo2](images/38.png)
+
+画面右上部にある実行ボタンをクリックして、Trigger Dag を選択します。
+
+![Airflow Demo3](images/39.png)
+
+![Airflow Demo4](images/40.png)
+
+各タスクの緑四角をクリックすると右側に詳細情報が表示されます。
+Logs クリックします。
+
+![Airflow Demo4](images/41.png)
+
+print_date タスクの date コマンド実行結果を確認できます。
+
+![Airflow Demo5](images/42.png)
+
+sleep タスクの結果は以下となります。
+
+![Airflow Demo6](images/43.png)
+
+templated タスクの結果は以下となります。
+
+![Airflow Demo7](images/44.png)
