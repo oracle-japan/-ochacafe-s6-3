@@ -757,3 +757,15 @@ sleep タスクの結果は以下となります。
 templated タスクの結果は以下となります。
 
 ![Airflow Demo7](images/44.png)
+
+上部メニューの Code ボタンをクリックして、tutorial ワークフローのソースコードが表示されるので、templated タスクの jinja テンプレートコードを確認してみます。
+
+![Airflow Demo8](images/45.png)
+
+実装内容は以下となります。
+
+![Airflow Demo9](images/46.png)
+
+実行ログと照らし合わせてみます。
+
+![Airflow Demo10](images/47.png)
